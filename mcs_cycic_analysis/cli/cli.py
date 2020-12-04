@@ -1,6 +1,6 @@
 import logging
-from argparse import ArgumentParser
-from pathlib import Path
+
+from configargparse import ArgParser
 
 from mcs_cycic_analysis.cli.commands.create_spreadsheet_command import CreateSpreadsheetCommand
 
@@ -11,7 +11,7 @@ class Cli:
     }
 
     def __init__(self):
-        self.__arg_parser = ArgumentParser()
+        self.__arg_parser = ArgParser()
         self.__logger = logging.getLogger(self.__class__.__name__)
 
     def __add_arguments(self):
@@ -24,7 +24,7 @@ class Cli:
             arg_parsers.append(command_arg_parser)
 
         for arg_parser in arg_parsers:
-            # arg_parser.add_argument("-c", is_config_file=True, help="config file path")
+            arg_parser.add_argument("-c", is_config_file=True, help="config file path")
             arg_parser.add_argument(
                 '--debug',
                 action='store_true',
@@ -54,7 +54,7 @@ class Cli:
 
         command_class = self.__COMMAND_CLASSES[args.command]
         command_kwds = vars(args).copy()
-        # command_kwds.pop("c")
+        command_kwds.pop("c")
         command_kwds.pop("logging_level")
         command = command_class(**command_kwds)
 
