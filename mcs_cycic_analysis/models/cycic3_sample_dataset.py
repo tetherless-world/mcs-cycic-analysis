@@ -20,14 +20,16 @@ class Cycic3SampleDataset:
 
     @classmethod
     def load(cls):
+        data_dir_path = DATA_DIR_PATH / "downloaded" / "cycic3_sample"
+
         def read_jsonl_file(*, jsonl_file_stem: str, model_class):
-            with open(DATA_DIR_PATH / (jsonl_file_stem + ".jsonl")) as jsonl_file:
+            with open(data_dir_path / (jsonl_file_stem + ".jsonl")) as jsonl_file:
                 for line in jsonl_file:
                     line = line.strip()
                     if not line:
                         continue
-                    json_object = json.loads(line)
-                    yield model_class.from_json(json_object)
+                    # json_object = json.loads(line)
+                    yield model_class.from_json(line)
 
         def read_part(letter):
             labels = tuple(
@@ -46,11 +48,17 @@ class Cycic3SampleDataset:
 
             return Cycic3Part(
                 labels=labels,
-                labels_by_run_id={label.run_id: label for label in labels},
+                labels_by_run_id={
+                    label.run_id: label
+                    for label in sorted(labels, key=lambda label: label.run_id)
+                },
                 letter=letter,
                 questions=questions,
                 questions_by_run_id={
-                    question.run_id: question for question in questions
+                    question.run_id: question
+                    for question in sorted(
+                        questions, key=lambda question: question.run_id
+                    )
                 },
             )
 
@@ -60,15 +68,15 @@ class Cycic3SampleDataset:
         links = {}
         reverse_links = {}
         with open(
-            DATA_DIR_PATH / "cycic3_question_links.csv"
+            data_dir_path / "cycic3_question_links.csv"
         ) as question_links_csv_file:
             for row in csv.DictReader(question_links_csv_file):
-                cycic3a = row["cycic3a"]
-                cycic3b = row["cycic3b"]
+                cycic3a = int(row["cycic3a"])
+                cycic3b = int(row["cycic3b"])
                 assert cycic3a not in links, cycic3a
                 links[cycic3a] = cycic3b
                 assert cycic3b not in reverse_links, cycic3b
-                links[cycic3b] = cycic3a
+                reverse_links[cycic3b] = cycic3a
 
         entangled_question_pairs = []
         for cycic3a_question_run_id, cycic3b_question_run_id in links.items():
