@@ -9,7 +9,6 @@ class _Command(ABC):
         self._logger = logging.getLogger(self.__class__.__name__)
 
     @classmethod
-    @abstractmethod
     def add_arguments(cls, arg_parser: ArgParser):
         """
         Add arguments to the given argparser.

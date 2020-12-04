@@ -2,12 +2,14 @@ import logging
 
 from configargparse import ArgParser
 
-from mcs_cycic_analysis.cli.commands.create_spreadsheet_command import CreateSpreadsheetCommand
+from mcs_cycic_analysis.cli.commands.create_spreadsheets_command import (
+    CreateSpreadsheetsCommand,
+)
 
 
 class Cli:
     __COMMAND_CLASSES = {
-        "create-spreadsheet": CreateSpreadsheetCommand,
+        "create-spreadsheets": CreateSpreadsheetsCommand,
     }
 
     def __init__(self):
@@ -17,7 +19,7 @@ class Cli:
     def __add_arguments(self):
         arg_parsers = [self.__arg_parser]
 
-        subparsers = self.__arg_parser.add_subparsers(dest="command")
+        subparsers = self.__arg_parser.add_subparsers(dest="command", required=True)
         for command_name, command_class in self.__COMMAND_CLASSES.items():
             command_arg_parser = subparsers.add_parser(command_name)
             command_class.add_arguments(command_arg_parser)
@@ -26,13 +28,11 @@ class Cli:
         for arg_parser in arg_parsers:
             arg_parser.add_argument("-c", is_config_file=True, help="config file path")
             arg_parser.add_argument(
-                '--debug',
-                action='store_true',
-                help='turn on debugging'
+                "--debug", action="store_true", help="turn on debugging"
             )
             arg_parser.add_argument(
-                '--logging-level',
-                help='set logging-level level (see Python logging module)'
+                "--logging-level",
+                help="set logging-level level (see Python logging module)",
             )
 
     def __configure_logging(self, args):
@@ -43,8 +43,8 @@ class Cli:
         else:
             logging_level = logging.INFO
         logging.basicConfig(
-            format='%(asctime)s:%(processName)s:%(module)s:%(lineno)s:%(name)s:%(levelname)s: %(message)s',
-            level=logging_level
+            format="%(asctime)s:%(processName)s:%(module)s:%(lineno)s:%(name)s:%(levelname)s: %(message)s",
+            level=logging_level,
         )
 
     def main(self):
@@ -65,5 +65,5 @@ def main():
     Cli().main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

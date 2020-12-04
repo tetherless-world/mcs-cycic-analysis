@@ -85,7 +85,7 @@ class Cycic3SampleDataset:
                     part_a_question=part_a.questions_by_run_id[cycic3a_question_run_id],
                     part_a_label=part_a.labels_by_run_id[cycic3a_question_run_id],
                     part_b_question=part_b.questions_by_run_id[cycic3b_question_run_id],
-                    part_b_label=part_b.questions_by_run_id[cycic3b_question_run_id],
+                    part_b_label=part_b.labels_by_run_id[cycic3b_question_run_id],
                 )
             )
 
