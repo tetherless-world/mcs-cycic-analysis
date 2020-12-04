@@ -1,1 +1,8 @@
 ConfigArgParse==1.2.3
+dataclasses-json==0.5.2
+marshmallow==3.9.1
+marshmallow-enum==1.5.1
+mypy-extensions==0.4.3
+stringcase==1.2.0
+typing-extensions==3.7.4.3
+typing-inspect==0.6.0
