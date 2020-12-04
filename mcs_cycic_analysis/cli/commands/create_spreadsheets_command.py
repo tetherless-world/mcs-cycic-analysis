@@ -22,14 +22,14 @@ class CreateSpreadsheetsCommand(_Command):
                 self.__get_question_columns_dict(
                     question=entangled_question_pair.part_a_question,
                     label=entangled_question_pair.part_a_label,
-                    prefix="part_a",
+                    prefix="part_a_",
                 )
             )
             row_dict.update(
                 self.__get_question_columns_dict(
                     question=entangled_question_pair.part_b_question,
                     label=entangled_question_pair.part_b_label,
-                    prefix="part_b",
+                    prefix="part_b_",
                 )
             )
             row_dicts.append(row_dict)
@@ -48,20 +48,26 @@ class CreateSpreadsheetsCommand(_Command):
             prefix + "question": question.question,
             prefix + "answer_option0": question.answer_option0,
             prefix + "answer_option1": question.answer_option1,
-            prefix + "question_type": question.questionType,
-            prefix + "blanks": str(question.blanks),
-            prefix + "guid": question.guid,
-            prefix + "run_id": question.run_id,
         }
-        categories_max = 3
+        if label is not None:
+            row_dict[prefix + "correct_answer"] = str(label.correct_answer)
+        categories_max = 1
         assert len(question.categories) <= categories_max
         categories = copy(question.categories)
         while len(categories) < categories_max:
             categories.append("")
         for category_i, category in enumerate(categories):
             row_dict[f"category{category_i}"] = category
-        if label is not None:
-            row_dict[prefix + "correct_answer"] = str(label.correct_answer)
+        row_dict.update(
+            {
+                # prefix + "question_type": question.questionType,
+                # prefix + "blanks": str(question.blanks),
+                # prefix + "guid": question.guid,
+                prefix
+                + "run_id": question.run_id,
+            }
+        )
+
         return row_dict
 
     def __write_csv_file(
