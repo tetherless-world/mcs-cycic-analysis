@@ -1,4 +1,5 @@
-/data/downloaded/cycic3_sample/
+/data/downloaded/cycic3_sample/*.csv
+/data/downloaded/cycic3_sample/*.jsonl
 /data/spreadsheets/cycic3_sample/
 *.pyc
 /venv/
