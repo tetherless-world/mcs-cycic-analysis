@@ -95,9 +95,8 @@ class CreateSpreadsheetsCommand(_Command):
             {
                 # prefix + "question_type": question.questionType,
                 # prefix + "blanks": str(question.blanks),
-                # prefix + "guid": question.guid,
-                prefix
-                + "run_id": question.run_id,
+                prefix + "guid": question.guid,
+                prefix + "run_id": question.run_id,
             }
         )
 
